@@ -1,13 +1,13 @@
-package me.olgas.recipesapp;
+package me.olgas.recipesapp.services;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class RecipesAppApplication {
+public class RecipeAppApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(RecipesAppApplication.class, args);
+        SpringApplication.run(RecipeAppApplication.class, args);
     }
 
 }

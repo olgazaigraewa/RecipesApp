@@ -2,7 +2,7 @@ package me.olgas.recipesapp.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
+import java.util.Map;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -16,6 +16,8 @@ public class Recipe {
     private int cookingTime;
     private List<Ingredient> ingredients;
     private LinkedList<String> steps;
+    private Map<Long, Recipe>recipes;
+
 
 
 }

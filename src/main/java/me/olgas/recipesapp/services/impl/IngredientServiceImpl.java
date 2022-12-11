@@ -2,14 +2,13 @@ package me.olgas.recipesapp.services.impl;
 
 import me.olgas.recipesapp.model.Ingredient;
 import org.springframework.stereotype.Service;
-
 import java.util.Map;
 import java.util.TreeMap;
 
 @Service
-public class IngredientServiceImpl implements IngredientService{
+public class IngredientServiceImpl implements IngredientService {
 
-    private static final Map<Long, Ingredient> ingredients = new TreeMap<>();
+    private static Map<Long, Ingredient> ingredients = new TreeMap<>();
     private static long lastId = 0;
 
 
@@ -20,12 +19,46 @@ public class IngredientServiceImpl implements IngredientService{
     }
 
     @Override
-    public long getIngredient(Ingredient ingredient) {
-       return 0;
+    public Ingredient getIngredient(long id) {
+        for (Ingredient n : ingredients.values()) {
+            Ingredient ingredient = ingredients.get(id);
+            if (ingredient != null) {
+                return ingredient;
+            }
+
+        }
+        return null;
     }
 
     @Override
-    public Ingredient getIngredient(long id) {
-        return ingredients.get(id);
+    public Ingredient getAllIngredient() {
+        return null;
+    }
+
+    @Override
+    public Ingredient editIngredient(long id, Ingredient ingredient) {
+        for (Ingredient n : ingredients.values()) {
+            if (ingredients.containsKey(id)) {
+                ingredients.put(id, ingredient);
+                return ingredient;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public boolean deleteIngredient(long id) {
+        for (Ingredient n : ingredients.values()) {
+            if (ingredients.containsKey(id)) {
+                ingredients.remove(id);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void deleteAllIngredient() {
+        ingredients = new TreeMap<>();
     }
 }

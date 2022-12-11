@@ -17,27 +17,64 @@ public class RecipeController {
     /**
      * Добавление нового рецепта
      */
-
     @PostMapping
-    public ResponseEntity<Long>addRecipe(@RequestBody Recipe recipe){
-        long id =  recipeService.addRecipe(recipe);
+    public ResponseEntity<Long> addRecipe(@RequestBody Recipe recipe) {
+        long id = recipeService.addRecipe(recipe);
         return ResponseEntity.ok(id);
     }
 
     /**
-     * Получение рецепта
+     * Получение рецепта по id
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Recipe>getRecipeById(@PathVariable long id){
-       Recipe recipe = recipeService.getRecipe(id);
-       if (recipe==null){
-           return ResponseEntity.notFound().build();
-       }
-       return ResponseEntity.ok(recipe);
+    public ResponseEntity<Recipe> getRecipeById(@PathVariable long id) {
+        Recipe recipe = recipeService.getRecipe(id);
+        if (recipe == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(recipe);
     }
 
+    /**
+     * Получение списка всех рецептов
+     */
+    @GetMapping
+    public ResponseEntity<Recipe> getAllRecipe() {
+        recipeService.getAllRecipe();
+        return ResponseEntity.ok().build();
+    }
 
+    /**
+     * Редактирование рецепта по id
+     */
+    @PutMapping("/{id}")
+    public ResponseEntity<Recipe> editRecipe(@PathVariable long id, @RequestBody Recipe recipe) {
+        Recipe r = recipeService.editRecipe(id, recipe);
+        if (recipe == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(recipe);
+    }
 
+    /**
+     * Удаление рецепта по id
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteRecipe(@PathVariable long id) {
+        if (recipeService.deleteRecipe(id)) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    /**
+     * Удаление всех рецептов
+     */
+    @DeleteMapping
+    public ResponseEntity<Void> deleteAllRecipe() {
+        recipeService.deleteAllRecipe();
+        return ResponseEntity.ok().build();
+    }
 
 }
 

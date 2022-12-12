@@ -1,4 +1,4 @@
-package me.olgas.recipesapp.services;
+package me.olgas.recipesapp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

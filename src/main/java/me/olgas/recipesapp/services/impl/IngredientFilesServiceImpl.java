@@ -4,6 +4,7 @@ import me.olgas.recipesapp.services.IngredientFilesService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -45,12 +46,34 @@ public class IngredientFilesServiceImpl implements IngredientFilesService {
             throw new RuntimeException(e);
         }
     }
+    /**
+     * метод возвращает файл
+     */
+    @Override
+    public File getFile(){
+        return new File(ingredientsFilePath + "/" + ingredientsFileName);
+    }
+
+    /**
+     * создание временных файлов
+     */
+    @Override
+    public Path createTempFile(String suffix){
+        try {
+            return  Files.createTempFile(Path.of(ingredientsFilePath), "tempFile", suffix);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+
 
     /**
      * удалить и очистить файл
      */
 
-    private boolean cleanIngredientsFile(){
+    public boolean cleanIngredientsFile(){
         try {
             Path path = Path.of(ingredientsFilePath, ingredientsFileName);
             Files.deleteIfExists(path);

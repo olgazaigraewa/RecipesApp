@@ -4,6 +4,7 @@ import me.olgas.recipesapp.services.RecipeFilesService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -46,10 +47,33 @@ public class RecipeFilesServiceImpl implements RecipeFilesService {
     }
 
     /**
+     * метод возвращает файл
+     */
+    @Override
+    public File getFile(){
+        return new File(recipesFilePath + "/" + recipesFileName);
+    }
+
+    /**
+     * создание временных файлов
+     */
+    @Override
+    public Path createTempFile(String suffix){
+        try {
+           return  Files.createTempFile(Path.of(recipesFilePath), "tempFile", suffix);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+
+    /**
      * удалить и очистить файл
      */
 
-    private boolean cleanRecipesFile(){
+    @Override
+    public boolean cleanRecipesFile(){
         try {
             Path path = Path.of(recipesFilePath, recipesFileName);
             Files.deleteIfExists(path);
@@ -60,6 +84,5 @@ public class RecipeFilesServiceImpl implements RecipeFilesService {
             return false;
         }
     }
-
 
 }

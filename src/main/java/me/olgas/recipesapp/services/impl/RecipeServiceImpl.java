@@ -88,7 +88,6 @@ public class RecipeServiceImpl implements RecipeService {
      * запись в файл
      */
     private void saveToFile(){
-
         try {
             String json = new ObjectMapper().writeValueAsString(recipes);
             recipeFilesService.saveRecipesToFile(json);

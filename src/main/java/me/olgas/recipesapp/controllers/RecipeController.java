@@ -9,10 +9,17 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import me.olgas.recipesapp.model.Recipe;
 import me.olgas.recipesapp.services.impl.RecipeService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.io.InputStream;
+
 
 @RestController
 @RequestMapping("/recipes")
@@ -45,7 +52,9 @@ public class RecipeController {
     public ResponseEntity<Long> addRecipe(@RequestBody Recipe recipe) {
         long id = recipeService.addRecipe(recipe);
         return ResponseEntity.ok(id);
+
     }
+
 
     /**
      * Получение рецепта по id
@@ -98,6 +107,16 @@ public class RecipeController {
     public ResponseEntity<Recipe> getAllRecipe() {
         recipeService.getAllRecipe();
         return ResponseEntity.ok().build();
+    }
+    @PostMapping(value = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Object> addReciresFromFile(@RequestParam MultipartFile file) {
+        try (InputStream stream = file.getInputStream()) {
+            recipeService.addRecipesFromInputStream(stream);
+            return ResponseEntity.ok().build();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body(e.toString());
+        }
     }
 
     /**

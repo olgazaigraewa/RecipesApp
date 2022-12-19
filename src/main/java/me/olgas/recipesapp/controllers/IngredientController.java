@@ -8,8 +8,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import me.olgas.recipesapp.model.Ingredient;
-import me.olgas.recipesapp.model.Recipe;
+;
 import me.olgas.recipesapp.services.impl.IngredientService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,7 @@ public class IngredientController {
     public IngredientController(IngredientService ingredientService) {
         this.ingredientService = ingredientService;
     }
+
 
     /**
      * Добавление нового ингредиента
@@ -67,18 +69,18 @@ public class IngredientController {
 
             )
     })
-    public ResponseEntity<Ingredient> getIngredientById(@PathVariable long id) {
+    public ResponseEntity<String> getIngredientById(@PathVariable long id) {
         Ingredient ingredient = ingredientService.getIngredient(id);
         if (ingredient == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ингредиент не найден. Ошибка 404");
         }
-        return ResponseEntity.ok(ingredient);
+        return ResponseEntity.status(HttpStatus.FOUND).body(ingredient.toString());
     }
 
     /**
      * Получение списка всех ингредиентов
      */
-    @GetMapping
+    @GetMapping(value = "/allIngredients")
     @Operation( summary = "Получение списка всех ингредиентов")
     @ApiResponses(value = {
             @ApiResponse(

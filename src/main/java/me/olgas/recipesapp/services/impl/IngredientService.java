@@ -7,7 +7,9 @@ public interface IngredientService {
 
     long addIngredient(Ingredient ingredient);
 
-    Ingredient getIngredient(long id);
+    default Ingredient getIngredient(long id) {
+        return null;
+    }
 
     Ingredient getAllIngredient();
 

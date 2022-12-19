@@ -32,10 +32,6 @@ public class FilesPassController {
         this.ingredientFilesService = ingredientFilesService;
     }
 
-    /**
-     * выгрузить файл
-     */
-
     @GetMapping(value = "/recipeExport")
     @Operation(summary = "Сохранение файла с рецептами пользователем")
     public ResponseEntity<InputStreamResource> dowloadFile() throws FileNotFoundException {
@@ -52,10 +48,6 @@ public class FilesPassController {
             return ResponseEntity.noContent().build();
         }
     }
-
-    /**
-     * загрузить файл на сервер / с рецептами
-     */
 
     @PostMapping(value = "/recipeImport", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "Загрузка файла с рецептами с компьютера пользоаателя")

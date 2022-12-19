@@ -1,6 +1,9 @@
 package me.olgas.recipesapp.services.impl;
 import me.olgas.recipesapp.model.Recipe;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 public interface RecipeService {
 
     long addRecipe(Recipe recipe);
@@ -14,4 +17,7 @@ public interface RecipeService {
     void deleteAllRecipe();
 
     Recipe getAllRecipe();
+
+
+    void addRecipesFromInputStream(InputStream inputStream) throws IOException;
 }

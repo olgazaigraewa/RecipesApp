@@ -3,16 +3,18 @@ package me.olgas.recipesapp.services.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.NonNull;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import me.olgas.recipesapp.model.Recipe;
 import me.olgas.recipesapp.services.RecipeFilesService;
 import org.springframework.stereotype.Service;
-
 import javax.annotation.PostConstruct;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 import java.util.TreeMap;
 
-@NonNull
+
 @Service
 public class RecipeServiceImpl implements RecipeService {
 
@@ -20,15 +22,19 @@ public class RecipeServiceImpl implements RecipeService {
 
 
     private static Map<Long, Recipe> recipes = new TreeMap<>();
-    private static long lastId = 0;
+    private  static  long lastId = 0;
 
     public RecipeServiceImpl(RecipeFilesService recipeFilesService) {
         this.recipeFilesService = recipeFilesService;
     }
 
     @PostConstruct
-    private void init(){
-        readFrommFile();
+    private void init() {
+        try {
+            readFrommFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -36,7 +42,9 @@ public class RecipeServiceImpl implements RecipeService {
         recipes.put(lastId, recipe);
         saveToFile();
         return lastId++;
+
     }
+
 
     @Override
     public Recipe getRecipe(long id) {
@@ -84,12 +92,24 @@ public class RecipeServiceImpl implements RecipeService {
         return null;
     }
 
+
+
+    /**
+     * скачивание всех рецептов в одном файле???
+     */
+    @Override
+    public void addRecipesFromInputStream(InputStream inputStream) throws IOException {
+
+    }
+
+
     /**
      * запись в файл
      */
-    private void saveToFile(){
+    private void saveToFile() {
         try {
-            String json = new ObjectMapper().writeValueAsString(recipes);
+            DataFile dataFile = new DataFile();
+            String json = new ObjectMapper().writeValueAsString(dataFile);//сохранение информации в файл
             recipeFilesService.saveRecipesToFile(json);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
@@ -99,14 +119,24 @@ public class RecipeServiceImpl implements RecipeService {
     /**
      * чтение из файла
      */
-    private void readFrommFile(){
+    private void readFrommFile() {
         try {
             String json = recipeFilesService.readRecipesFromFile();
-            recipes =   new ObjectMapper().readValue(json, new TypeReference<TreeMap<Long, Recipe>>() {
+
+            DataFile dataFile= new ObjectMapper().readValue(json, new TypeReference<DataFile>() {
             });
+            lastId = dataFile.getLastId();
+            recipes = dataFile.getRecipes();
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+    @Data
+    @NoArgsConstructor
+    private static class DataFile{
+
+        private long lastId;
+        private TreeMap<Long, Recipe>recipes;
     }
 
 }
